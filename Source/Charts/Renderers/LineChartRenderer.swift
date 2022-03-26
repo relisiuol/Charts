@@ -19,6 +19,8 @@ open class LineChartRenderer: LineRadarRenderer
     // NOTE: Unlike the other renderers, LineChartRenderer populates accessibleChartElements in drawCircles due to the nature of its drawing options.
     /// A nested array of elements ordered logically (i.e not in visual/drawing order) for use with VoiceOver.
     private lazy var accessibilityOrderedElements: [[NSUIAccessibilityElement]] = accessibilityCreateEmptyOrderedElements()
+    private var hasDrawMin: Bool = false
+    private var hasDrawMax: Bool = false
 
     @objc open weak var dataProvider: LineChartDataProvider?
     
@@ -573,18 +575,41 @@ open class LineChartRenderer: LineRadarRenderer
                         continue
                     }
                     
-                    if dataSet.isDrawValuesEnabled
+                    if dataSet.isDrawValuesEnabled || (dataSet.isDrawMinMaxValuesEnabled && ((dataSet.yMin == e.y && !hasDrawMin) || (dataSet.yMax == e.y && !hasDrawMax)))
                     {
-                        context.drawText(formatter.stringForValue(e.y,
-                                                                  entry: e,
-                                                                  dataSetIndex: i,
-                                                                  viewPortHandler: viewPortHandler),
-                                         at: CGPoint(x: pt.x,
-                                                     y: pt.y - CGFloat(valOffset) - valueFont.lineHeight),
-                                         align: .center,
-                                         angleRadians: angleRadians,
-                                         attributes: [.font: valueFont,
-                                                      .foregroundColor: dataSet.valueTextColorAt(j)])
+                        if dataSet.isDrawValuesEnabled
+                        {
+                            context.drawText(formatter.stringForValue(e.y,
+                                                                      entry: e,
+                                                                      dataSetIndex: i,
+                                                                      viewPortHandler: viewPortHandler),
+                                             at: CGPoint(x: pt.x,
+                                                         y: pt.y - CGFloat(valOffset) - valueFont.lineHeight),
+                                             align: .center,
+                                             angleRadians: angleRadians,
+                                             attributes: [.font: valueFont,
+                                                          .foregroundColor: dataSet.valueTextColorAt(j)])
+                        } else {
+                            var yPosition: CGFloat = pt.y - CGFloat(valOffset) - valueFont.lineHeight
+                            if dataSet.yMin == e.y {
+                                hasDrawMin = true
+                                yPosition = pt.y + CGFloat(valOffset)
+                            }
+                            if dataSet.yMax == e.y {
+                                hasDrawMax = true
+                                yPosition = pt.y - CGFloat(valOffset) - valueFont.lineHeight
+                            }
+                            context.drawText(formatter.stringForValue(e.y,
+                                                                      entry: e,
+                                                                      dataSetIndex: i,
+                                                                      viewPortHandler: viewPortHandler),
+                                             at: CGPoint(x: min(max(35, pt.x), (context.boundingBoxOfClipPath.width - 35)),
+                                                         y: yPosition),
+                                            align: .center,
+                                            angleRadians: angleRadians,
+                                            attributes: [.font: valueFont,
+                                                         .foregroundColor: dataSet.valueTextColorAt(j)])
+                        }
                     }
                     
                     if let icon = e.icon, dataSet.isDrawIconsEnabled
