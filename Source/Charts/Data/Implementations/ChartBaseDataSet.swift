@@ -344,6 +344,17 @@ open class ChartBaseDataSet: NSObject, ChartDataSetProtocol, NSCopying
         return drawValuesEnabled
     }
 
+    /// Set this to true to draw max and min y-values on the chart.
+    ///
+    /// - Note: For bar and line charts: if `maxVisibleCount` is reached, no values will be drawn even if this is enabled.
+    open var drawMinMaxValuesEnabled = true
+    
+    /// `true` if min and max y-value drawing is enabled, `false` ifnot
+    open var isDrawMinMaxValuesEnabled: Bool
+    {
+        return drawMinMaxValuesEnabled
+    }
+
     /// Set this to true to draw y-icons on the chart.
     ///
     /// - Note: For bar and line charts: if `maxVisibleCount` is reached, no icons will be drawn even if this is enabled.
