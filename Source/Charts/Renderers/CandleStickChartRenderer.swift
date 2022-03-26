@@ -359,6 +359,7 @@ open class CandleStickChartRenderer: LineScatterCandleRadarRenderer
                                              at: CGPoint(x: min(max(35, pt.x), (context.boundingBoxOfClipPath.width - 35)),
                                                          y: yPosition),
                                              align: .center,
+                                             angleRadians: angleRadians,
                                              attributes: [.font: valueFont,
                                                           .foregroundColor: dataSet.valueTextColorAt(j)])
                         }
