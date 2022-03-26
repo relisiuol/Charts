@@ -58,7 +58,7 @@ open class BarLineScatterCandleBubbleRenderer: NSObject, DataRenderer
     /// - Returns: `true` if the DataSet values should be drawn, `false` if not.
     internal func shouldDrawValues(forDataSet set: ChartDataSetProtocol) -> Bool
     {
-        return set.isVisible && (set.isDrawValuesEnabled || set.isDrawIconsEnabled)
+        return set.isVisible && (set.isDrawValuesEnabled || set.isDrawMinMaxValuesEnabled || set.isDrawIconsEnabled)
     }
 
     open func initBuffers() { }
