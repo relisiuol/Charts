@@ -50,7 +50,9 @@ open class CandleStickChartRenderer: LineScatterCandleRadarRenderer
     private var _closePoints = [CGPoint](repeating: CGPoint(), count: 2)
     private var _bodyRect = CGRect()
     private var _lineSegments = [CGPoint](repeating: CGPoint(), count: 2)
-    
+    private var hasDrawMin: Bool = false
+    private var hasDrawMax: Bool = false
+
     @objc open func drawDataSet(context: CGContext, dataSet: CandleChartDataSetProtocol)
     {
         guard
@@ -320,20 +322,48 @@ open class CandleStickChartRenderer: LineScatterCandleRadarRenderer
                         continue
                     }
                     
-                    if dataSet.isDrawValuesEnabled
+                    if dataSet.isDrawValuesEnabled || (dataSet.isDrawMinMaxValuesEnabled && ((dataSet.yMin == e.low && !hasDrawMin) || (dataSet.yMax == e.high && !hasDrawMax)))
                     {
-                        context.drawText(formatter.stringForValue(e.high,
-                                                                  entry: e,
-                                                                  dataSetIndex: i,
-                                                                  viewPortHandler: viewPortHandler),
-                                         at: CGPoint(x: pt.x,
-                                                     y: pt.y - yOffset),
-                                         align: .center,
-                                         angleRadians: angleRadians,
-                                         attributes: [.font: valueFont,
-                                                      .foregroundColor: dataSet.valueTextColorAt(j)])
+                        if dataSet.isDrawValuesEnabled
+                        {
+                            context.drawText(formatter.stringForValue(e.high,
+                                                                      entry: e,
+                                                                      dataSetIndex: i,
+                                                                      viewPortHandler: viewPortHandler),
+                                             at: CGPoint(x: pt.x,
+                                                         y: pt.y - yOffset),
+                                             align: .center,
+                                             angleRadians: angleRadians,
+                                             attributes: [.font: valueFont,
+                                                          .foregroundColor: dataSet.valueTextColorAt(j)])
+                        } else {
+                            var value = e.y
+                            var yPosition = (pt.y - yOffset)
+                            if dataSet.yMin == e.low {
+                                hasDrawMin = true
+                                value = e.low
+                                pt.x = CGFloat(e.x)
+                                pt.y = CGFloat(e.low * phaseY)
+                                pt = pt.applying(valueToPixelMatrix)
+                                yPosition = pt.y + 5
+                            }
+                            if dataSet.yMax == e.high {
+                                hasDrawMax = true
+                                value = e.high
+                                yPosition = (pt.y - yOffset)
+                            }
+                            context.drawText(formatter.stringForValue(value,
+                                                                      entry: e,
+                                                                      dataSetIndex: i,
+                                                                      viewPortHandler: viewPortHandler),
+                                             at: CGPoint(x: min(max(35, pt.x), (context.boundingBoxOfClipPath.width - 35)),
+                                                         y: yPosition),
+                                             align: .center,
+                                             attributes: [.font: valueFont,
+                                                          .foregroundColor: dataSet.valueTextColorAt(j)])
+                        }
                     }
-                    
+
                     if let icon = e.icon, dataSet.isDrawIconsEnabled
                     {
                         context.drawImage(icon,
