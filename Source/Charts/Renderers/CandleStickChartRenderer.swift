@@ -160,6 +160,11 @@ open class CandleStickChartRenderer: LineScatterCandleRadarRenderer
                 
                 trans.rectValueToPixel(&_bodyRect)
                 
+                let minWidth = max(((UIScreen.main.bounds.width / 1.5) / CGFloat(max((dataProvider.data?.entryCount ?? 1), 1))), _bodyRect.size.width)
+                let diff = minWidth - _bodyRect.size.width
+                _bodyRect.origin.x = _bodyRect.origin.x - (diff / 2)
+                _bodyRect.size.width = minWidth
+
                 // draw body differently for increasing and decreasing entry
 
                 if open > close
