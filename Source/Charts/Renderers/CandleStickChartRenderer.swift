@@ -153,9 +153,10 @@ open class CandleStickChartRenderer: LineScatterCandleRadarRenderer
                 
                 // calculate the body
                 
-                _bodyRect.origin.x = CGFloat(xPos) - 0.5 + barSpace
+                let minWidth = max(((UIScreen.main.bounds.width / 1.5) / CGFloat(max((dataProvider.data?.entryCount ?? 1), 1))), ((CGFloat(xPos) + 0.5 - barSpace) - (CGFloat(xPos) - 0.5 + barSpace)))
+                _bodyRect.origin.x = _bodyRect.origin.x - ((minWidth - _bodyRect.size.width) / 2)
                 _bodyRect.origin.y = CGFloat(close * phaseY)
-                _bodyRect.size.width = (CGFloat(xPos) + 0.5 - barSpace) - _bodyRect.origin.x
+                _bodyRect.size.width = minWidth
                 _bodyRect.size.height = CGFloat(open * phaseY) - _bodyRect.origin.y
                 
                 trans.rectValueToPixel(&_bodyRect)
