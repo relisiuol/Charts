@@ -160,7 +160,7 @@ open class CandleStickChartRenderer: LineScatterCandleRadarRenderer
                 
                 trans.rectValueToPixel(&_bodyRect)
 
-                let minWidth = max(((viewPortHandler.chartWidth / CGFloat(max((dataProvider.data?.entryCount ?? 1), 1))) - barSpace), _bodyRect.size.width)
+                let minWidth = max(((viewPortHandler.chartWidth / CGFloat(max((dataProvider.data?.entryCount ?? 1), 1))) - (barSpace * 2)), _bodyRect.size.width)
                 let diff = minWidth - _bodyRect.size.width
                 _bodyRect.origin.x = _bodyRect.origin.x - (diff / 2)
                 _bodyRect.size.width = minWidth
