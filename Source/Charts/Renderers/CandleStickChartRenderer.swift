@@ -153,7 +153,7 @@ open class CandleStickChartRenderer: LineScatterCandleRadarRenderer
                 
                 // calculate the body
                 
-                let minWidth = max(((UIScreen.main.bounds.width / 1.5) / CGFloat(max((dataProvider.data?.entryCount ?? 1), 1))), ((CGFloat(xPos) + 0.5 - barSpace) - (CGFloat(xPos) - 0.5 + barSpace)))
+                let minWidth = max((viewPortHandler.chartWidth / CGFloat(max((dataProvider.data?.entryCount ?? 1), 1))), ((CGFloat(xPos) + 0.5 - barSpace) - (CGFloat(xPos) - 0.5 + barSpace)))
                 _bodyRect.origin.x = _bodyRect.origin.x - ((minWidth - _bodyRect.size.width) / 2)
                 _bodyRect.origin.y = CGFloat(close * phaseY)
                 _bodyRect.size.width = minWidth
