@@ -159,11 +159,6 @@ open class CandleStickChartRenderer: LineScatterCandleRadarRenderer
                 _bodyRect.size.height = CGFloat(open * phaseY) - _bodyRect.origin.y
                 
                 trans.rectValueToPixel(&_bodyRect)
-
-                let minWidth = max(((viewPortHandler.chartWidth / CGFloat(max((dataProvider.data?.entryCount ?? 1), 1))) - (barSpace * 2)), _bodyRect.size.width)
-                let diff = minWidth - _bodyRect.size.width
-                _bodyRect.origin.x = _bodyRect.origin.x - (diff / 2)
-                _bodyRect.size.width = minWidth
                 
                 // draw body differently for increasing and decreasing entry
 
