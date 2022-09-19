@@ -152,14 +152,18 @@ open class CandleStickChartRenderer: LineScatterCandleRadarRenderer
                 context.strokeLineSegments(between: _shadowPoints)
                 
                 // calculate the body
-                
-                let minWidth = max((viewPortHandler.chartWidth / CGFloat(max((dataProvider.data?.entryCount ?? 1), 1))), ((CGFloat(xPos) + 0.5 - barSpace) - (CGFloat(xPos) - 0.5 + barSpace)))
-                _bodyRect.origin.x = _bodyRect.origin.x - ((minWidth - _bodyRect.size.width) / 2)
+
+                _bodyRect.origin.x = CGFloat(xPos) - 0.5 + barSpace
                 _bodyRect.origin.y = CGFloat(close * phaseY)
-                _bodyRect.size.width = minWidth
+                _bodyRect.size.width = (CGFloat(xPos) + 0.5 - barSpace) - _bodyRect.origin.x
                 _bodyRect.size.height = CGFloat(open * phaseY) - _bodyRect.origin.y
                 
                 trans.rectValueToPixel(&_bodyRect)
+
+                let minWidth = max(((UIScreen.main.bounds.width / 1.5) / CGFloat(max((dataProvider.data?.entryCount ?? 1), 1))), _bodyRect.size.width)
+                let diff = minWidth - _bodyRect.size.width
+                _bodyRect.origin.x = _bodyRect.origin.x - (diff / 2)
+                _bodyRect.size.width = minWidth
                 
                 // draw body differently for increasing and decreasing entry
 
