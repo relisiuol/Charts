@@ -415,6 +415,7 @@ open class ChartBaseDataSet: NSObject, ChartDataSetProtocol, NSCopying
         copy.formLineDashPhase = formLineDashPhase
         copy.formLineDashLengths = formLineDashLengths
         copy.drawValuesEnabled = drawValuesEnabled
+        copy.drawMinMaxValuesEnabled = drawMinMaxValuesEnabled
         copy.drawIconsEnabled = drawIconsEnabled
         copy.iconsOffset = iconsOffset
         copy.visible = visible

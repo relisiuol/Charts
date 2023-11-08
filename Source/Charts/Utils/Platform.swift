@@ -62,6 +62,12 @@ types are aliased to either their UI* implementation (on iOS) or their NS* imple
         return NSUIScreen.main
     }
 
+    func NSUIMainScrenBounds() -> CGSize
+    {
+        return UIScreen.main.bounds.size
+    }
+
+
 #endif
 
 #if os(OSX)
@@ -281,5 +287,10 @@ types are aliased to either their UI* implementation (on iOS) or their NS* imple
     {
 		return NSUIScreen.main
 	}
+
+    func NSUIMainScrenBounds() -> CGSize
+    {
+        return NSScreen.main?.visibleFrame.size ?? NSScreen.main?.frame.size ?? CGSizeMake(0, 0)
+    }
     
 #endif

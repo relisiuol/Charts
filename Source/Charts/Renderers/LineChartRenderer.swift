@@ -19,8 +19,6 @@ open class LineChartRenderer: LineRadarRenderer
     // NOTE: Unlike the other renderers, LineChartRenderer populates accessibleChartElements in drawCircles due to the nature of its drawing options.
     /// A nested array of elements ordered logically (i.e not in visual/drawing order) for use with VoiceOver.
     private lazy var accessibilityOrderedElements: [[NSUIAccessibilityElement]] = accessibilityCreateEmptyOrderedElements()
-    private var hasDrawMin: Bool = false
-    private var hasDrawMax: Bool = false
 
     @objc open weak var dataProvider: LineChartDataProvider?
     
@@ -528,7 +526,10 @@ open class LineChartRenderer: LineRadarRenderer
             let phaseY = animator.phaseY
             
             var pt = CGPoint()
-            
+
+            var hasDrawMin: Bool = false
+            var hasDrawMax: Bool = false
+
             for i in lineData.indices
             {
                 guard let

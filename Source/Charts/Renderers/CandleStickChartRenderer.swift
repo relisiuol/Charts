@@ -50,8 +50,6 @@ open class CandleStickChartRenderer: LineScatterCandleRadarRenderer
     private var _closePoints = [CGPoint](repeating: CGPoint(), count: 2)
     private var _bodyRect = CGRect()
     private var _lineSegments = [CGPoint](repeating: CGPoint(), count: 2)
-    private var hasDrawMin: Bool = false
-    private var hasDrawMax: Bool = false
 
     @objc open func drawDataSet(context: CGContext, dataSet: CandleChartDataSetProtocol)
     {
@@ -160,7 +158,7 @@ open class CandleStickChartRenderer: LineScatterCandleRadarRenderer
                 
                 trans.rectValueToPixel(&_bodyRect)
                 
-                let minWidth = max(((UIScreen.main.bounds.width / 1.5) / CGFloat(max((dataProvider.data?.entryCount ?? 1), 1))), _bodyRect.size.width)
+                let minWidth = max(((NSUIMainScrenBounds().width / 1.5) / CGFloat(max((dataProvider.data?.entryCount ?? 1), 1))), _bodyRect.size.width)
                 let diff = minWidth - _bodyRect.size.width
                 _bodyRect.origin.x = _bodyRect.origin.x - (diff / 2)
                 _bodyRect.size.width = minWidth
@@ -283,9 +281,11 @@ open class CandleStickChartRenderer: LineScatterCandleRadarRenderer
         if isDrawingValuesAllowed(dataProvider: dataProvider)
         {
             let phaseY = animator.phaseY
-            
+
             var pt = CGPoint()
-            
+            var hasDrawMin: Bool = false
+            var hasDrawMax: Bool = false
+
             for i in candleData.indices
             {
                 guard let
@@ -326,7 +326,7 @@ open class CandleStickChartRenderer: LineScatterCandleRadarRenderer
                     {
                         continue
                     }
-                    
+                    // TODO: Debug here min max on candle chart
                     if dataSet.isDrawValuesEnabled || (dataSet.isDrawMinMaxValuesEnabled && ((dataSet.yMin == e.low && !hasDrawMin) || (dataSet.yMax == e.high && !hasDrawMax)))
                     {
                         if dataSet.isDrawValuesEnabled
